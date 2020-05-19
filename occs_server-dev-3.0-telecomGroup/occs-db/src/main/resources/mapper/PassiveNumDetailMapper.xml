@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.PassiveNumDetailMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.PassiveNumDetail">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PHONE_NUM" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="CLIENT_NAME" jdbcType="VARCHAR" property="clientName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="GENDER" jdbcType="VARCHAR" property="gender" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+    <result column="BUSSINESS_TYPE" jdbcType="VARCHAR" property="bussinessType" />
+    <result column="PASSIVENUM_ID" jdbcType="INTEGER" property="passivenumId" />
+    <result column="TELENUM_GROUP_NAME" jdbcType="VARCHAR" property="telenumGroupName" />
+    <result column="IS_SYNCHRON" jdbcType="INTEGER" property="isSynchron" />
+    <result column="ORIGIN" jdbcType="INTEGER" property="origin" />
+  </resultMap>
+  <select id="selectTeleNumGroupDetailById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <!--
+    SELECT ID, PHONE_NUM, CLIENT_NAME, CREATE_TIME,AGE ,GENDER, PROVINCE, CITY, BUSINESS_HALL_NAME, BUSSINESS_TYPE, PASSIVENUM_ID
+    FROM Z_PASSIVENUM_DETAILS
+    WHERE PASSIVENUM_ID = #{id}
+    -->
+    SELECT zd.ID, zd.PHONE_NUM, zd.CLIENT_NAME, zd.CREATE_TIME,zd.AGE ,zd.GENDER, zd.PROVINCE, zd.CITY, zd.BUSINESS_HALL_NAME,
+    zd.BUSSINESS_TYPE, zd.PASSIVENUM_ID
+    FROM Z_PASSIVENUM_DETAILS zd,Z_PASSIVENUM z
+    WHERE z.ID =#{id} AND zd.TELENUM_GROUP_NAME=z.TELENUM_GROUP_NAME
+    <if test="phoneNum != null and phoneNum != ''">
+      AND zd.PHONE_NUM LIKE CONCAT('%',#{phoneNum},'%')
+    </if>
+  </select>
+  <insert id="addPassivenumDetailByPassiveNumId" parameterType="java.util.List">
+    INSERT INTO Z_PASSIVENUM_DETAILS(PHONE_NUM, CLIENT_NAME, CREATE_TIME,AGE ,GENDER, PROVINCE, CITY, BUSINESS_HALL_NAME, BUSSINESS_TYPE, PASSIVENUM_ID,TELENUM_GROUP_NAME,ORIGIN )
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.phoneNum,jdbcType=VARCHAR},
+      #{item.clientName,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.age,jdbcType=VARCHAR},
+      #{item.gender,jdbcType=VARCHAR},
+      #{item.province,jdbcType=VARCHAR},
+      #{item.city,jdbcType=VARCHAR},
+      #{item.businessHallName,jdbcType=VARCHAR},
+      #{item.bussinessType,jdbcType=VARCHAR},
+      #{item.passivenumId,jdbcType=DECIMAL},
+      #{item.telenumGroupName,jdbcType=VARCHAR},
+      #{item.origin,jdbcType=DECIMAL}
+      )
+    </foreach>
+  </insert>
+
+  <delete id="deleteDetailById">
+    DELETE FROM Z_PASSIVENUM_DETAILS WHERE ID = #{id}
+  </delete>
+  <delete id="deleteDetailByPassiveNumId">
+    DELETE FROM Z_PASSIVENUM_DETAILS WHERE PASSIVENUM_ID = #{id}
+  </delete>
+  <insert id="addDetailById">
+    INSERT INTO Z_PASSIVENUM_DETAILS
+    (PHONE_NUM, CLIENT_NAME, CREATE_TIME,AGE ,GENDER, PROVINCE, CITY, BUSINESS_HALL_NAME, BUSSINESS_TYPE, PASSIVENUM_ID)
+    VALUES
+    (
+      #{item.phoneNum,jdbcType=VARCHAR},
+      #{item.clientName,jdbcType=VARCHAR},
+      #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.age,jdbcType=VARCHAR},
+      #{item.gender,jdbcType=VARCHAR},
+      #{item.province,jdbcType=VARCHAR},
+      #{item.city,jdbcType=VARCHAR},
+      #{item.businessHallName,jdbcType=VARCHAR},
+      #{item.bussinessType,jdbcType=VARCHAR},
+      #{item.passivenumId,jdbcType=DECIMAL}
+      )
+  </insert>
+  <select id="selectTeleNumGroupDetailByName" resultMap="BaseResultMap" >
+    SELECT ID, PHONE_NUM, CLIENT_NAME, CREATE_TIME,AGE ,GENDER, PROVINCE, CITY, BUSINESS_HALL_NAME, BUSSINESS_TYPE, PASSIVENUM_ID
+    FROM Z_PASSIVENUM_DETAILS
+    WHERE PHONE_NUM = #{phoneNum} LIMIT 1
+  </select>
+  <select id="countTeleNumGroupDetailByName" resultType="int">
+    SELECT COUNT(1) FROM Z_PASSIVENUM_DETAILS WHERE TELENUM_GROUP_NAME =#{telenumGroupName}
+  </select>
+  <select id="selectPassiveNumDetailByPassNum" resultMap="BaseResultMap">
+    SELECT ID, PHONE_NUM, CLIENT_NAME, CREATE_TIME,AGE ,GENDER, PROVINCE, CITY, BUSINESS_HALL_NAME, BUSSINESS_TYPE, PASSIVENUM_ID
+    FROM Z_PASSIVENUM_DETAILS WHERE TELENUM_GROUP_NAME = #{telenumGroupName} AND PHONE_NUM = #{phoneNum}
+  </select>
+  <select id="selectNoSynByTelenumGroupName" resultMap="BaseResultMap">
+    SELECT ID, PHONE_NUM, CLIENT_NAME, CREATE_TIME,AGE ,GENDER, PROVINCE, CITY, BUSINESS_HALL_NAME, BUSSINESS_TYPE, PASSIVENUM_ID
+    FROM Z_PASSIVENUM_DETAILS WHERE TELENUM_GROUP_NAME = #{telenumGroupName} AND (IS_SYNCHRON = 0 OR IS_SYNCHRON IS NULl) ORDER BY CREATE_TIME DESC limit #{dealNum}
+  </select>
+  <update id="incrementSynChronStatus">
+    UPDATE Z_PASSIVENUM_DETAILS SET IS_SYNCHRON = 1
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+  <delete id="deleteDetailByPassiveNumName">
+    DELETE FROM Z_PASSIVENUM_DETAILS WHERE TELENUM_GROUP_NAME = #{telenumGroupName}
+  </delete>
+</mapper>

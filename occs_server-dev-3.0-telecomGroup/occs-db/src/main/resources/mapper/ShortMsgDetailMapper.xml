@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.ShortMsgDetailMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.ShortMsgDetail">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SHORTMSG_ID" jdbcType="INTEGER" property="shortmsgId" />
+    <result column="SHORTMSG_NAME" jdbcType="VARCHAR" property="shortmsgName" />
+    <result column="TELENUM" jdbcType="VARCHAR" property="telenum" />
+    <result column="SEND_TIME" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="RECEIVE_TIME" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="RECEIVE_CONTENT" jdbcType="VARCHAR" property="receiveContent" />
+    <result column="DEAL_STATUS" jdbcType="VARCHAR" property="dealStatus" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+  </resultMap>
+  <select id="selectShortMsgDetailByShortMsgId" resultMap="BaseResultMap">
+    SELECT TELENUM,SEND_TIME,RECEIVE_TIME,RECEIVE_CONTENT,ID
+    FROM Z_SHORTMSG_DETAILS WHERE  SHORTMSG_ID = #{id}
+    ORDER BY SEND_TIME DESC
+  </select>
+
+  <insert id="insertBatchShortMsgDetail" parameterType="java.util.List">
+    INSERT INTO Z_SHORTMSG_DETAILS(SHORTMSG_ID,TELENUM,SEND_TIME,DEAL_STATUS,UUID)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.shortmsgId,jdbcType=DECIMAL},
+      #{item.telenum,jdbcType=VARCHAR},
+      #{item.sendTime,jdbcType=TIMESTAMP},
+      #{item.dealStatus,jdbcType=VARCHAR},
+      #{item.uuid,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  <select id="selectShortMsgByDealStatus" resultMap="BaseResultMap">
+    SELECT TELENUM,SHORTMSG_ID,SEND_TIME,RECEIVE_TIME,RECEIVE_CONTENT,ID
+    FROM Z_SHORTMSG_DETAILS WHERE  DEAL_STATUS = #{dealStatus}
+    ORDER BY SEND_TIME ASC LIMIT #{dealNum}
+  </select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.FilterRuleMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.FilterRule">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="DATA_SOURCE" jdbcType="VARCHAR" property="dataSource" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="BUSSINESS_TYPE" jdbcType="VARCHAR" property="bussinessType" />
+    <result column="FILTER_RATIO" jdbcType="INTEGER" property="filterRatio" />
+    <result column="TELENUM_GROUP_NAME" jdbcType="VARCHAR" property="telenumGroupName" />
+  </resultMap>
+
+  <select id="selectRule" resultMap="BaseResultMap">
+    SELECT ID,DATA_SOURCE,PROVINCE,BUSSINESS_TYPE,FILTER_RATIO,TELENUM_GROUP_NAME FROM Z_FILTER_RULE LIMIT 1
+  </select>
+</mapper>

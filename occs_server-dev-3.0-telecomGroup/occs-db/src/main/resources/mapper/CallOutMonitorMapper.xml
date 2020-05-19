@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.CallOutMonitorMapper">
+  <resultMap id="RealtimeExcutesResult" type="com.knowology.po.RealtimeExcute">
+    <result column="TOTAL" jdbcType="VARCHAR" property="total" />
+    <result column="COMPLETION" jdbcType="VARCHAR" property="completion" />
+    <result column="SUCCESS" jdbcType="VARCHAR" property="success" />
+   <result column="TODAYAMOUNT" jdbcType="VARCHAR" property="todayAmount" />
+  </resultMap>
+  <resultMap id="CallStatusResult" type="com.knowology.po.CallStatus">
+    <result column="CALL_STATUS_SUCCESS" jdbcType="VARCHAR" property="callStatusSuccess" />
+    <result column="CALL_STATUS_REJECT" jdbcType="VARCHAR" property="callStatusReject" />
+    <result column="CALL_STATUS_FAILRE" jdbcType="VARCHAR" property="callStatusFailre" />
+      <result column="CALL_STATUS_OTHER" jdbcType="VARCHAR" property="callStatusOther" />
+  </resultMap>
+  <resultMap id="TalkTimeResult" type="com.knowology.po.TalkTime">
+    <result column="TALKTIME0TO5" jdbcType="VARCHAR" property="talkTime0To5" />
+    <result column="TALKTIME5TO10" jdbcType="VARCHAR" property="talkTime5To10" />
+    <result column="TALKTIME10TO20" jdbcType="VARCHAR" property="talkTime10To20" />
+    <result column="TALKTIME20TO30" jdbcType="VARCHAR" property="talkTime20To30" />
+    <result column="TALKTIME30TO60" jdbcType="VARCHAR" property="talkTime30To60" />
+    <result column="TALKTIME60TO120" jdbcType="VARCHAR" property="talkTime60To120" />
+    <result column="TALKTIMEGREATER120" jdbcType="VARCHAR" property="talkTimeGreater120" />
+  </resultMap>
+  <resultMap id="RoundsResult" type="com.knowology.po.Rounds">
+    <result column="ROUNDS1" jdbcType="VARCHAR" property="rounds1" />
+    <result column="ROUNDS2" jdbcType="VARCHAR" property="rounds2" />
+    <result column="ROUNDS3" jdbcType="VARCHAR" property="rounds3" />
+    <result column="ROUNDS4" jdbcType="VARCHAR" property="rounds4" />
+    <result column="ROUNDS5" jdbcType="VARCHAR" property="rounds5" />
+    <result column="ROUNDS6" jdbcType="VARCHAR" property="rounds6" />
+    <result column="ROUNDS7" jdbcType="VARCHAR" property="rounds7" />
+    <result column="ROUNDSGREATER7" jdbcType="VARCHAR" property="roundsGreater7" />
+  </resultMap>
+  <resultMap id="HangupResult" type="com.knowology.po.Hangup">
+    <result column="SYSTEMHANGUP" jdbcType="VARCHAR" property="systemHangup" />
+    <result column="USERHANGUP" jdbcType="VARCHAR" property="userHangup" />
+  </resultMap>
+  <select id="realtimeExcuteResult" resultMap="RealtimeExcutesResult">
+      SELECT
+          SUM(CASE WHEN CALL_STATUS IS NOT NULL THEN 1 ELSE 0 END) TOTAL,
+          CONCAT(100*ROUND(SUM(CASE WHEN DEAL_STATUS = '已外呼' THEN 1 ELSE 0 END)/SUM(CASE WHEN DEAL_STATUS IS NOT NULL THEN 1 ELSE 1 END),2),'%') COMPLETION,
+          CONCAT(100*ROUND(SUM(CASE WHEN CALL_STATUS = '成功' THEN 1 ELSE 0 END)/SUM(CASE WHEN CALL_STATUS IS NOT NULL THEN 1 ELSE 0 END),2),'%') SUCCESS,
+          SUM(CASE WHEN DATE_FORMAT(UPDATE_TIME,'%Y-%m-%d')=DATE_FORMAT(sysdate(),'%Y-%m-%d') THEN 1 ELSE 0 END) TODAYAMOUNT
+      FROM Z_JOB_DETAILS
+    <where>
+      <if test="jobName != null and jobName != ''">
+        and JOB_NAME = #{jobName}
+      </if>
+    </where>
+  </select>
+
+  <select id="listCallStatusResult" resultMap="CallStatusResult">
+      SELECT
+          CONCAT(100*ROUND(SUM(CASE WHEN CALL_STATUS = '成功' THEN 1 ELSE 0 END)/SUM(CASE WHEN CALL_STATUS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN CALL_STATUS = '成功' THEN 1 ELSE 0 END)) CALL_STATUS_SUCCESS,
+          CONCAT(100*ROUND(SUM(CASE WHEN CALL_STATUS = '拒接' THEN 1 ELSE 0 END)/SUM(CASE WHEN CALL_STATUS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN CALL_STATUS = '拒接' THEN 1 ELSE 0 END)) CALL_STATUS_REJECT,
+          CONCAT(100*ROUND(SUM(CASE WHEN CALL_STATUS = '未接' THEN 1 ELSE 0 END)/SUM(CASE WHEN CALL_STATUS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN CALL_STATUS = '未接' THEN 1 ELSE 0 END)) CALL_STATUS_FAILRE,
+          CONCAT(100*ROUND(SUM(CASE WHEN CALL_STATUS = '其他' THEN 1 ELSE 0 END)/SUM(CASE WHEN CALL_STATUS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN CALL_STATUS = '其他' THEN 1 ELSE 0 END)) CALL_STATUS_OTHER
+      FROM Z_JOB_DETAILS
+    <where>
+      <if test="jobName != null and jobName != ''">
+        and  JOB_NAME = #{jobName}
+      </if>
+    </where>
+  </select>
+
+  <select id="listTalkTimeResult" resultMap="TalkTimeResult">
+      SELECT
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 0 AND TALK_TIME &lt; 5 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 0 AND TALK_TIME &lt; 5 THEN 1 ELSE 0 END)) TALKTIME0TO5,
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 5 AND TALK_TIME &lt; 10 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 5 AND TALK_TIME &lt; 10 THEN 1 ELSE 0 END)) TALKTIME5TO10,
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 10 AND TALK_TIME &lt; 20 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 10 AND TALK_TIME &lt; 20 THEN 1 ELSE 0 END) ) TALKTIME10TO20,
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 20 AND TALK_TIME &lt; 30 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 20 AND TALK_TIME &lt; 30 THEN 1 ELSE 0 END)) TALKTIME20TO30,
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 30 AND TALK_TIME &lt; 60 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 30 AND TALK_TIME &lt; 60 THEN 1 ELSE 0 END)) TALKTIME30TO60,
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 60 AND TALK_TIME &lt; 120 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 60 AND TALK_TIME &lt; 120 THEN 1 ELSE 0 END) ) TALKTIME60TO120,
+      CONCAT(100*ROUND(SUM(CASE WHEN TALK_TIME &gt;= 120 THEN 1 ELSE 0 END)/SUM(CASE WHEN TALK_TIME IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN TALK_TIME &gt;= 120 THEN 1 ELSE 0 END) ) TALKTIMEGREATER120
+      FROM Z_JOB_DETAILS
+    <where>
+      <if test="jobName != null and jobName != ''">
+         and  JOB_NAME = #{jobName}
+      </if>
+    </where>
+  </select>
+
+  <select id="listRoundsResult" resultMap="RoundsResult">
+    SELECT
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 1 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 1 THEN 1 ELSE 0 END)) ROUNDS1,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 2 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 2 THEN 1 ELSE 0 END)) ROUNDS2,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 3 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 3 THEN 1 ELSE 0 END)) ROUNDS3,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 4 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 4 THEN 1 ELSE 0 END)) ROUNDS4,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 5 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 5 THEN 1 ELSE 0 END)) ROUNDS5,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 6 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 6 THEN 1 ELSE 0 END)) ROUNDS6,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS = 7 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS = 7 THEN 1 ELSE 0 END)) ROUNDS7,
+      CONCAT(100*ROUND(SUM(CASE WHEN ROUNDS > 7 THEN 1 ELSE 0 END)/SUM(CASE WHEN ROUNDS IS NOT NULL THEN 1 ELSE 0 END),0),'-',SUM(CASE WHEN ROUNDS > 7 THEN 1 ELSE 0 END)) ROUNDSGREATER7
+    FROM Z_JOB_DETAILS
+    <where>
+      <if test="jobName != null and jobName != ''">
+        and  JOB_NAME = #{jobName}
+      </if>
+    </where>
+  </select>
+
+  <select id="listHangupResult" resultMap="HangupResult">
+      SELECT
+          CONCAT(100*ROUND(SUM(CASE WHEN HANGUP = '机器人' THEN 1 ELSE 0 END)/SUM(CASE WHEN HANGUP IS NOT NULL THEN 1 ELSE 1 END),0),'-',SUM(CASE WHEN HANGUP = '机器人' THEN 1 ELSE 0 END)) SYSTEMHANGUP,
+          CONCAT(100*ROUND(SUM(CASE WHEN HANGUP = '客户' THEN 1 ELSE 0 END)/SUM(CASE WHEN HANGUP IS NOT NULL THEN 1 ELSE 1 END),0),'-',SUM(CASE WHEN HANGUP = '客户' THEN 1 ELSE 0 END)) USERHANGUP
+      FROM Z_JOB_DETAILS
+    <where>
+      <if test="jobName != null and jobName != ''">
+        and  JOB_NAME = #{jobName}
+      </if>
+    </where>
+  </select>
+</mapper>

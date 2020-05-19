@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.JobDetailTaskMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.JobDetailTask">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="CALL_STATUS" jdbcType="VARCHAR" property="callStatus" />
+    <result column="PASSIVE_NUM" jdbcType="VARCHAR" property="passiveNum" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="SCENE" jdbcType="VARCHAR" property="scene" />
+    <result column="DEAL_STATUS" jdbcType="VARCHAR" property="dealStatus" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+    <result column="ROUNDS" jdbcType="INTEGER" property="rounds" />
+    <result column="HANGUP" jdbcType="VARCHAR" property="hangup" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="DEAL_TIMES" jdbcType="INTEGER" property="dealTimes" />
+    <result column="RESULT_TYPE" jdbcType="VARCHAR" property="resultType" />
+    <result column="CLIENT_NAME" jdbcType="VARCHAR" property="clientName" />
+    <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="NODE" jdbcType="VARCHAR" property="node" />
+    <result column="OVERALL" jdbcType="INTEGER" property="overall" />
+    <result column="SATIS_REASION" jdbcType="VARCHAR" property="satisReasion" />
+    <result column="SATIS_REASION_TXT" jdbcType="VARCHAR" property="satisReasionTxt" />
+    <result column="NOSATIS_REASION" jdbcType="VARCHAR" property="nosatisReasion" />
+    <result column="NOSATIS_REASION_TXT" jdbcType="VARCHAR" property="nosatisReasionTxt" />
+    <result column="WAIT_TIME_REASION" jdbcType="VARCHAR" property="waitTimeReasion" />
+    <result column="WAIT_TIME_REASION_TXT" jdbcType="VARCHAR" property="waitTimeReasionTxt" />
+    <result column="SERVICE_REASION" jdbcType="VARCHAR" property="serviceReasion" />
+    <result column="SERVICE_REASION_TXT" jdbcType="VARCHAR" property="serviceReasionTxt" />
+    <result column="SKILL_REASION" jdbcType="VARCHAR" property="skillReasion" />
+    <result column="SKILL_REASION_TXT" jdbcType="VARCHAR" property="skillReasionTxt" />
+    <result column="HALL_ENV_REASION" jdbcType="VARCHAR" property="hallEnvReasion" />
+    <result column="HALL_ENV_REASION_TXT" jdbcType="VARCHAR" property="hallEnvReasionTxt" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="APPOINT_RESULT" jdbcType="VARCHAR" property="appointResult" />
+    <result column="SHORTMSG_SEND_TIME" jdbcType="TIMESTAMP" property="shortmsgSendTime" />
+    <result column="SHORTMSG_RECEIVE_TIME" jdbcType="TIMESTAMP" property="shortmsgReceiveTime" />
+    <result column="SEND_SHORTMSG" jdbcType="INTEGER" property="sendShortmsg" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="BUSINESS_TYPE" jdbcType="VARCHAR" property="businessType" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+
+  <select id="loadJobDetailTasks" resultMap="BaseResultMap">
+    select ID,PASSIVE_NUM,CLIENT_NAME,BUSINESS_HALL_NAME
+    from Z_JOB_DETAILS_TASK
+    <where>
+      1=1
+      <if test="province !=null and province != ''">
+        and PROVINCE = #{province}
+      </if>
+      <if test="serviceType != null and serviceType != ''">
+        and SERVICE_TYPE = #{serviceType}
+      </if>
+      <if test="businessType != null and businessType != ''">
+        and BUSINESS_TYPE = #{businessType}
+      </if>
+      <if test="noCallProvince != null and noCallProvince.size>0">
+      	and PROVINCE not in
+      	(
+        <foreach collection="noCallProvince" item="item" index="index" separator=",">
+          #{item}
+        </foreach>
+        )
+      </if>
+      and
+      (
+        (
+        JOB_NAME = #{jobName} and DEAL_STATUS = '未外呼' AND APPOINT_RESULT IN('同意','未回','不发')
+        )
+        or
+        (
+        JOB_NAME = #{jobName} AND
+        DEAL_STATUS = '已外呼'
+        and CALL_STATUS in
+        (
+        <foreach collection="list" item="item" index="index" separator="or">
+          #{item}
+        </foreach>
+        )
+        and DEAL_TIMES &lt; (#{callTimes}  + 1) and DATE_SUB(NOW(),INTERVAL #{againCallInterval} MINUTE) > CALL_TIME
+        )
+      )
+    limit #{dealNum}
+    </where>
+  </select>
+
+  <update id="incrementDealTimes">
+    UPDATE Z_JOB_DETAILS_TASK SET DEAL_TIMES = DEAL_TIMES + 1
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+
+  <update id="incrementDealStatus">
+    UPDATE Z_JOB_DETAILS_TASK SET DEAL_STATUS = '已外呼'
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+  <insert id="insertJobDetailsTaskList" parameterType="java.util.List">
+    INSERT INTO Z_JOB_DETAILS_TASK(ID,PASSIVE_NUM,SCENE,JOB_NAME,DEAL_STATUS,APPOINT_RESULT)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.id,jdbcType=DECIMAL},
+      #{item.passiveNum,jdbcType=VARCHAR},
+      #{item.scene,jdbcType=VARCHAR},
+      #{item.jobName,jdbcType=VARCHAR},
+      #{item.dealStatus,jdbcType=VARCHAR},
+      #{item.appointResult,jdbcType=VARCHAR}
+      )
+    </foreach>
+  </insert>
+  <update id="updateSendShortMsgStatus">
+    UPDATE Z_JOB_DETAILS_TASK SET APPOINT_RESULT = '未回'
+    WHERE JOB_NAME=#{jobName} AND APPOINT_RESULT IS NULL
+  </update>
+  <update id="incrementSendShortMsg">
+    UPDATE Z_JOB_DETAILS_TASK SET SEND_SHORTMSG = 1
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+  <delete id="deleteTask">
+    DELETE FROM Z_JOB_DETAILS_TASK WHERE ID=#{id}
+  </delete>
+  <delete id="deleteTaskByJobName">
+    DELETE FROM Z_JOB_DETAILS_TASK WHERE JOB_NAME=#{jobName}
+  </delete>
+</mapper>

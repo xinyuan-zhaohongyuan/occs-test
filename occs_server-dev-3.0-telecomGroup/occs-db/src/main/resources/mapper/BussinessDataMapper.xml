@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.BussinessDataMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.BussinessData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="RECORD_ID" jdbcType="VARCHAR" property="recordId" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="SALES_NAME" jdbcType="VARCHAR" property="salesName" />
+    <result column="SALES_LEVEL" jdbcType="VARCHAR" property="salesLevel" />
+    <result column="SALES_TYPE" jdbcType="VARCHAR" property="salesType" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SALES_NO" jdbcType="VARCHAR" property="salesNo" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="COMPLE_TIME" jdbcType="TIMESTAMP" property="compleTime" />
+    <result column="PRODUCE_TYPE" jdbcType="VARCHAR" property="produceType" />
+    <result column="FLAG" jdbcType="INTEGER" property="flag" />
+  </resultMap>
+
+  <resultMap id="BussinessHallSampleResult" type="com.knowology.excelVo.BussinessHallSample">
+    <result column="RECORD_ID" jdbcType="VARCHAR" property="recordId" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="PRODUCE_TYPE" jdbcType="VARCHAR" property="produceType" />
+    <result column="SALES_NAME" jdbcType="VARCHAR" property="salesName" />
+    <result column="SALES_LEVEL" jdbcType="VARCHAR" property="salesLevel" />
+    <result column="SALES_TYPE" jdbcType="VARCHAR" property="salesType" />
+    <result column="COMPLE_TIME" jdbcType="TIMESTAMP" property="compleTime" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="CALL_STATUS" jdbcType="VARCHAR" property="callStatus" />
+  </resultMap>
+
+  <resultMap id="BussinessHallResult" type="com.knowology.excelVo.BussinessHallResult">
+    <result column="RECORD_ID" jdbcType="VARCHAR" property="recordId" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="PRODUCE_TYPE" jdbcType="VARCHAR" property="produceType" />
+    <result column="SALES_NAME" jdbcType="VARCHAR" property="salesName" />
+    <result column="SALES_LEVEL" jdbcType="VARCHAR" property="salesLevel" />
+    <result column="SALES_TYPE" jdbcType="VARCHAR" property="salesType" />
+    <result column="COMPLE_TIME" jdbcType="TIMESTAMP" property="compleTime" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+    <result column="SATIS_REASION" jdbcType="VARCHAR" property="satisReasion" />
+    <result column="SATIS_REASION_TXT" jdbcType="VARCHAR" property="satisReasionTxt" />
+    <result column="NOSATIS_REASION" jdbcType="VARCHAR" property="noSatisReasion" />
+    <result column="NOSATIS_REASION_TXT" jdbcType="VARCHAR" property="noSatisReasionTxt" />
+    <result column="INTENTFIND" jdbcType="VARCHAR" property="intentfind" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+
+  <resultMap id="GovernDeliverySampleResult" type="com.knowology.excelVo.GovernDeliverySample">
+    <result column="RECORD_ID" jdbcType="VARCHAR" property="recordId" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="SALES_NO" jdbcType="VARCHAR" property="salesNo" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="PRODUCE_TYPE" jdbcType="VARCHAR" property="produceType" />
+    <result column="COMPLE_TIME" jdbcType="TIMESTAMP" property="compleTime" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+  </resultMap>
+
+  <resultMap id="GovernDeliveryResult" type="com.knowology.excelVo.GovernDeliveryResult">
+    <result column="RECORD_ID" jdbcType="VARCHAR" property="recordId" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="SALES_NO" jdbcType="VARCHAR" property="salesNo" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="PRODUCE_TYPE" jdbcType="VARCHAR" property="produceType" />
+    <result column="COMPLE_TIME" jdbcType="TIMESTAMP" property="compleTime" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="CALL_STATUS" jdbcType="VARCHAR" property="callStatus" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+  </resultMap>
+  <select id="selectInnerData" resultMap="BaseResultMap">
+    SELECT ID,PROVINCE,PRODUCE_TYPE,SERVICE_TYPE,PHONE_NUMBER,FLAG FROM Z_BUSSINESS_DATA WHERE TO_DAYS(CREATE_TIME) = TO_DAYS(NOW()) AND FLAG=#{flag}
+  </select>
+  <insert id="insertBussinessHallData" parameterType="java.util.List">
+    INSERT INTO Z_BUSSINESS_DATA
+    (RECORD_ID,PROVINCE,CITY,AREA_CODE,PHONE_NUMBER,SERVICE_TYPE,PRODUCE_TYPE,SALES_NAME,SALES_LEVEL,SALES_TYPE,COMPLE_TIME,FLAG,CREATE_TIME)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+        #{item.recordId,jdbcType=VARCHAR},
+        #{item.province,jdbcType=VARCHAR},
+        #{item.city,jdbcType=VARCHAR},
+        #{item.areaCode,jdbcType=VARCHAR},
+        #{item.phoneNumber,jdbcType=VARCHAR},
+        #{item.serviceType,jdbcType=VARCHAR},
+        #{item.produceType,jdbcType=VARCHAR},
+        #{item.salesName,jdbcType=VARCHAR},
+        #{item.salesLevel,jdbcType=VARCHAR},
+        #{item.salesType,jdbcType=VARCHAR},
+        #{item.compleTime,jdbcType=TIMESTAMP},
+        #{item.flag,jdbcType=INTEGER},
+        #{item.createTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+
+  <insert id="insertGovernDeliverylData" parameterType="java.util.List">
+    INSERT INTO Z_BUSSINESS_DATA
+    (RECORD_ID,PROVINCE,CITY,AREA_CODE,PHONE_NUMBER,SERVICE_TYPE,PRODUCE_TYPE,SALES_NO,COMPLE_TIME,FLAG,CREATE_TIME)
+    VALUES
+    <foreach collection="list" index="index" item="item" separator=",">
+      (
+      #{item.recordId,jdbcType=VARCHAR},
+      #{item.province,jdbcType=VARCHAR},
+      #{item.city,jdbcType=VARCHAR},
+      #{item.areaCode,jdbcType=VARCHAR},
+      #{item.phoneNumber,jdbcType=VARCHAR},
+      #{item.serviceType,jdbcType=VARCHAR},
+      #{item.produceType,jdbcType=VARCHAR},
+      #{item.salesNo,jdbcType=VARCHAR},
+      #{item.compleTime,jdbcType=TIMESTAMP},
+      #{item.flag,jdbcType=INTEGER},
+      #{item.createTime,jdbcType=TIMESTAMP}
+      )
+    </foreach>
+  </insert>
+
+  <select id="selectBussinessHallSampleResult" resultMap="BussinessHallSampleResult">
+    select bd.RECORD_ID,bd.PROVINCE,bd.CITY,AREA_CODE,bd.PHONE_NUMBER,bd.SERVICE_TYPE,bd.PRODUCE_TYPE,bd.SALES_NAME,bd.SALES_LEVEL,bd.SALES_TYPE,bd.COMPLE_TIME,jd.CALL_TIME,jd.CALL_STATUS from Z_BUSSINESS_DATA bd,Z_JOB_DETAILS jd WHERE jd.JOB_NAME=#{jobName} AND bd.ID=jd.INFO_ID AND TO_DAYS(jd.CALL_TIME) = TO_DAYS(NOW())
+  </select>
+
+  <select id="selectBussinessHallResult" resultMap="BussinessHallResult">
+    select
+      bd.RECORD_ID,bd.PROVINCE,bd.CITY,AREA_CODE,bd.PHONE_NUMBER,bd.SERVICE_TYPE,bd.PRODUCE_TYPE,bd.SALES_NAME,bd.SALES_LEVEL,bd.SALES_TYPE,bd.COMPLE_TIME,jd.TALK_TIME,
+	  jd.SATIS_REASION,jd.SATIS_REASION_TXT,jd.NOSATIS_REASION,jd.NOSATIS_REASION_TXT,bd.INTENTFIND,jd.CONTENT
+    from Z_BUSSINESS_DATA bd,Z_JOB_DETAILS jd WHERE jd.JOB_NAME=#{jobName} AND bd.ID=jd.INFO_ID AND TO_DAYS(jd.CALL_TIME) = TO_DAYS(NOW())
+  </select>
+
+  <select id="selectGovernDeliverySampleResult" resultMap="GovernDeliverySampleResult">
+    select bd.RECORD_ID,bd.PROVINCE,bd.CITY,AREA_CODE,bd.PHONE_NUMBER,bd.SERVICE_TYPE,bd.PRODUCE_TYPE,bd.SALES_NO,bd.COMPLE_TIME,jd.CALL_TIME,jd.CALL_STATUS from Z_BUSSINESS_DATA bd,Z_JOB_DETAILS jd WHERE jd.JOB_NAME=#{jobName} AND bd.ID=jd.INFO_ID AND TO_DAYS(jd.CALL_TIME) = TO_DAYS(NOW())
+  </select>
+
+  <select id="selectGovernDeliveryResult" resultMap="GovernDeliveryResult">
+    select bd.RECORD_ID,bd.PROVINCE,bd.CITY,AREA_CODE,bd.PHONE_NUMBER,bd.SERVICE_TYPE,bd.PRODUCE_TYPE,bd.SALES_NO,bd.COMPLE_TIME,jd.TALK_TIME from Z_BUSSINESS_DATA bd,Z_JOB_DETAILS jd WHERE jd.JOB_NAME=#{jobName} AND bd.ID=jd.INFO_ID AND TO_DAYS(jd.CALL_TIME) = TO_DAYS(NOW())
+  </select>
+  
+  <update id="updateIntentfind">
+  	UPDATE Z_BUSSINESS_DATA SET intentfind=#{intentfind} where id = #{id}
+  </update>
+</mapper>

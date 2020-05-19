@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.DataStorageMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.DataStorage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PHONE_NUM" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="CLIENT_NAME" jdbcType="VARCHAR" property="clientName" />
+    <result column="INPUT_TIME" jdbcType="TIMESTAMP" property="inputTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="GENDER" jdbcType="VARCHAR" property="gender" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+    <result column="BUSSINESS_TYPE" jdbcType="VARCHAR" property="bussinessType" />
+  </resultMap>
+</mapper>

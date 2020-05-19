@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.JobDetailMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.JobDetail">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="CALL_STATUS" jdbcType="VARCHAR" property="callStatus" />
+    <result column="PASSIVE_NUM" jdbcType="VARCHAR" property="passiveNum" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="SCENE" jdbcType="VARCHAR" property="scene" />
+    <result column="DEAL_STATUS" jdbcType="VARCHAR" property="dealStatus" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+    <result column="ROUNDS" jdbcType="INTEGER" property="rounds" />
+    <result column="HANGUP" jdbcType="VARCHAR" property="hangup" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="DEAL_TIMES" jdbcType="INTEGER" property="dealTimes" />
+    <result column="RESULT_TYPE" jdbcType="VARCHAR" property="resultType" />
+    <result column="CLIENT_NAME" jdbcType="VARCHAR" property="clientName" />
+    <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+    <result column="TAG" jdbcType="VARCHAR" property="tag" />
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+    <result column="OVERALL" jdbcType="INTEGER" property="overall" />
+    <result column="APPOINT_RESULT" jdbcType="VARCHAR" property="appointResult" />
+    <result column="SEND_SHORTMSG" jdbcType="INTEGER" property="sendShortmsg" />
+    <result column="SATIS_REASION" jdbcType="VARCHAR" property="satisReasion" />
+    <result column="SATIS_REASION_TXT" jdbcType="VARCHAR" property="satisReasionTxt" />
+    <result column="NOSATIS_REASION" jdbcType="VARCHAR" property="nosatisReasion" />
+    <result column="NOSATIS_REASION_TXT" jdbcType="VARCHAR" property="nosatisReasionTxt" />
+    <result column="WAIT_TIME_REASION" jdbcType="VARCHAR" property="waitTimeReasion" />
+    <result column="WAIT_TIME_REASION_TXT" jdbcType="VARCHAR" property="waitTimeReasionTxt" />
+    <result column="SERVICE_REASION" jdbcType="VARCHAR" property="serviceReasion" />
+    <result column="SERVICE_REASION_TXT" jdbcType="VARCHAR" property="serviceReasionTxt" />
+    <result column="SKILL_REASION" jdbcType="VARCHAR" property="skillReasion" />
+    <result column="SKILL_REASION_TXT" jdbcType="VARCHAR" property="skillReasionTxt" />
+    <result column="HALL_ENV_REASION " jdbcType="VARCHAR" property="hallEnvReasion" />
+    <result column="HALL_ENV_REASION_TXT" jdbcType="VARCHAR" property="hallEnvReasionTxt" />
+    <result column="INFO_ID" jdbcType="INTEGER" property="infoId" />
+  </resultMap>
+  <resultMap id="shortMsgJobDetail" type="com.knowology.po.ShortMsgJobDetail">
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="PASSIVE_NUM" jdbcType="VARCHAR" property="passiveNum" />
+    <result column="SHORTMSG_CONTENT" jdbcType="VARCHAR" property="shortMsgContent" />
+  </resultMap>
+  <resultMap id="countJobDetailCall" type="com.knowology.dto.JobCountCallNum">
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="COMPLETE" jdbcType="INTEGER" property="complete" />
+    <result column="READY" jdbcType="INTEGER" property="ready" />
+    <result column="SUCCESS" jdbcType="INTEGER" property="success" />
+  </resultMap>
+  <select id="listJobDetails" resultMap="BaseResultMap">
+    SELECT ID,JOB_NAME,CALL_TIME,SCENE,CALL_STATUS,DEAL_STATUS,PASSIVE_NUM,TALK_TIME,ROUNDS,HANGUP,RESULT_TYPE,CLIENT_NAME,BUSINESS_HALL_NAME,OVERALL,APPOINT_RESULT,SEND_SHORTMSG
+    ,SATIS_REASION,SATIS_REASION_TXT,NOSATIS_REASION,NOSATIS_REASION_TXT,WAIT_TIME_REASION,WAIT_TIME_REASION_TXT,SERVICE_REASION,SERVICE_REASION_TXT,SKILL_REASION,SKILL_REASION_TXT,HALL_ENV_REASION,HALL_ENV_REASION_TXT
+    FROM Z_JOB_DETAILS
+    <where>
+      <if test="jobName != null and ''!=jobName">
+        and JOB_NAME = #{jobName}
+      </if>
+    </where>
+    ORDER BY CALL_TIME DESC,UPDATE_TIME DESC
+  </select>
+  <select id="searchJobDetails" resultMap="BaseResultMap">
+    SELECT ID,CALL_TIME,CALL_STATUS,PASSIVE_NUM,TALK_TIME,ROUNDS,HANGUP,RESULT_TYPE,CLIENT_NAME,BUSINESS_HALL_NAME,OVERALL,APPOINT_RESULT,SEND_SHORTMSG
+    FROM Z_JOB_DETAILS
+    WHERE JOB_NAME = #{jobName}
+    <if test="jobId != null ">
+      and ID = #{jobId}
+    </if>
+    <if test="startTime != null and ''!=startTime">
+      and CALL_TIME &gt;= DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="endTime != null and ''!=endTime">
+      and CALL_TIME &lt;= DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i:%s')
+    </if>
+    <if test="callStatus != null and ''!=callStatus">
+      and CALL_STATUS = #{callStatus}
+    </if>
+    <if test="passiveNum != null and ''!=passiveNum">
+      and PASSIVE_NUM LIKE concat('%',#{passiveNum,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="'0-5'==talkTime">
+      and TALK_TIME &gt; 0 and TALK_TIME &lt; 5
+    </if>
+    <if test="'5-10'==talkTime">
+      and TALK_TIME &gt;= 5 and TALK_TIME &lt; 10
+    </if>
+    <if test="'10-20'==talkTime">
+      and TALK_TIME &gt;= 10 and TALK_TIME &lt; 20
+    </if>
+    <if test="'20-30'==talkTime">
+      and TALK_TIME &gt;=20  and TALK_TIME &lt; 30
+    </if>
+    <if test="'30-60'==talkTime">
+      and TALK_TIME &gt;= 30 and TALK_TIME &lt; 60
+    </if>
+    <if test="'60-120'==talkTime">
+      and TALK_TIME &gt;= 60 and TALK_TIME &lt; 120
+    </if>
+    <if test="'>120'==talkTime">
+      and TALK_TIME &gt;= 120
+    </if>
+    <if test="rounds != null and ''!=rounds">
+      and ROUNDS = #{rounds}
+    </if>
+    <if test="hangup != null and ''!=hangup">
+      and HANGUP = #{hangup}
+    </if>
+    <if test="resultType != null and ''!=resultType">
+      and RESULT_TYPE = #{resultType}
+    </if>
+    <if test="clientName != null and ''!=clientName">
+      and CLIENT_NAME = #{clientName}
+    </if>
+    <if test="businessHallName != null and ''!=businessHallName">
+      and BUSINESS_HALL_NAME = #{businessHallName}
+    </if>
+    ORDER BY CALL_TIME DESC,UPDATE_TIME DESC
+  </select>
+
+  <update id="incrementDealTimes">
+    UPDATE Z_JOB_DETAILS SET DEAL_TIMES = DEAL_TIMES + 1
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+  <update id="incrementDealStatus">
+    UPDATE Z_JOB_DETAILS SET DEAL_STATUS = '已外呼'
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+
+  <select id="countUnCompleteRecall" resultType="java.lang.Integer">
+    select count(1) from Z_JOB_DETAILS
+    where DEAL_TIMES != (#{recallTimes} + 1) AND (CALL_STATUS IS NULL OR CALL_STATUS != '成功') AND JOB_NAME= #{jobName}
+  </select>
+
+  <select id="loadOneDayJobDetails" resultMap="BaseResultMap">
+    select * from Z_JOB_DETAILS where DATE_FORMAT(CALL_TIME,'%Y-%m-%d') = #{date}
+  </select>
+  <select id="selectRecordresult" resultMap="BaseResultMap">
+    SELECT CONTENT,URL,JOB_NAME
+    FROM Z_JOB_DETAILS WHERE ID = #{id}
+  </select>
+
+  <select id="selectJobName" resultMap="BaseResultMap">
+    <!--
+    SELECT zjd.JOB_NAME
+    FROM Z_JOB_DETAILS zjd,Z_JOB zj WHERE zjd.JOB_NAME=zj.JOB_NAME AND zj.ID = #{id}
+    -->
+    SELECT JOB_NAME FROM Z_JOB WHERE ID = #{id}
+  </select>
+
+  <select id="loadShortMsgJobDetails" resultMap="shortMsgJobDetail">
+   SELECT zjb.ID,zjb.JOB_NAME,zjb.PASSIVE_NUM,zs.SHORTMSG_CONTENT
+    FROM Z_JOB zj,Z_JOB_DETAILS zjb,Z_SHORTMSG zs
+    WHERE zj.JOB_NAME = #{jobName} AND zjb.JOB_NAME=zj.JOB_NAME AND zj.SHORTMSG_MODEL_NAME=zs.SHORTMSG_NAME AND zjb.SEND_SHORTMSG IS NULL
+    limit #{dealNum}
+  </select>
+  <update id="incrementSendShortMsg">
+    UPDATE Z_JOB_DETAILS SET SEND_SHORTMSG = 1
+    WHERE
+    <foreach collection="list" item="item" index="index" separator="or">
+      ID = #{item}
+    </foreach>
+  </update>
+  <update id="updateSendShortMsgStatus">
+      UPDATE Z_JOB_DETAILS SET APPOINT_RESULT = '未回'
+      WHERE JOB_NAME=#{jobName} AND APPOINT_RESULT IS NULL
+  </update>
+  <select id="countCallNum" resultMap="countJobDetailCall">
+    SELECT
+      JOB_NAME,
+      SUM(CASE WHEN CALL_TIME IS NOT NULL THEN 1 ELSE 0 END) COMPLETE,
+      SUM(CASE WHEN APPOINT_RESULT = '未回' OR APPOINT_RESULT = '同意' THEN 1 ELSE 0 END) READY,
+      SUM(CASE WHEN CALL_STATUS = '成功' THEN 1 ELSE 0 END) SUCCESS
+    FROM Z_JOB_DETAILS WHERE JOB_NAME = #{jobName}
+  </select>
+  <delete id="deleteByJobName">
+    DELETE FROM Z_JOB_DETAILS WHERE JOB_NAME=#{jobName}
+  </delete>
+  <select id="selectPassNumbyJobId" resultType="String">
+    SELECT PASSIVE_NUM FROM Z_JOB_DETAILS WHERE ID=#{jobId}
+  </select>
+  <resultMap id="BussinessHallResult" type="com.knowology.excelVo.BussinessHallResult">
+  	<result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="RECORD_ID" jdbcType="VARCHAR" property="recordId" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="SERVICE_TYPE" jdbcType="VARCHAR" property="serviceType" />
+    <result column="PRODUCE_TYPE" jdbcType="VARCHAR" property="produceType" />
+    <result column="SALES_NAME" jdbcType="VARCHAR" property="salesName" />
+    <result column="SALES_LEVEL" jdbcType="VARCHAR" property="salesLevel" />
+    <result column="SALES_TYPE" jdbcType="VARCHAR" property="salesType" />
+    <result column="COMPLE_TIME" jdbcType="TIMESTAMP" property="compleTime" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+    <result column="SATIS_REASION" jdbcType="VARCHAR" property="satisReasion" />
+    <result column="SATIS_REASION_TXT" jdbcType="VARCHAR" property="satisReasionTxt" />
+    <result column="NOSATIS_REASION" jdbcType="VARCHAR" property="noSatisReasion" />
+    <result column="NOSATIS_REASION_TXT" jdbcType="VARCHAR" property="noSatisReasionTxt" />
+  </resultMap>
+  <select id="selectJobDetailAndBussinessData" resultMap="BussinessHallResult">
+   select bd.id,
+      bd.RECORD_ID,bd.PROVINCE,bd.CITY,AREA_CODE,bd.PHONE_NUMBER,bd.SERVICE_TYPE,bd.PRODUCE_TYPE,bd.SALES_NAME,bd.SALES_LEVEL,bd.SALES_TYPE,bd.COMPLE_TIME,jd.TALK_TIME,
+	  jd.SATIS_REASION,jd.SATIS_REASION_TXT,jd.NOSATIS_REASION,jd.NOSATIS_REASION_TXT
+    from Z_BUSSINESS_DATA bd,Z_JOB_DETAILS jd WHERE bd.ID=jd.INFO_ID and jd.id=#{jobId};
+  </select>
+</mapper>

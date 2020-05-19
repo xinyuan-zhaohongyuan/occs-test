@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.JobDetailMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.JobDetail">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="CALL_STATUS" jdbcType="VARCHAR" property="callStatus" />
+    <result column="PASSIVE_NUM" jdbcType="VARCHAR" property="passiveNum" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="SCENE" jdbcType="VARCHAR" property="scene" />
+    <result column="DEAL_STATUS" jdbcType="VARCHAR" property="dealStatus" />
+    <result column="TALK_TIME" jdbcType="INTEGER" property="talkTime" />
+    <result column="ROUNDS" jdbcType="INTEGER" property="rounds" />
+    <result column="HANGUP" jdbcType="VARCHAR" property="hangup" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="DEAL_TIMES" jdbcType="INTEGER" property="dealTimes" />
+    <result column="RESULT_TYPE" jdbcType="VARCHAR" property="resultType" />
+    <result column="CLIENT_NAME" jdbcType="VARCHAR" property="clientName" />
+    <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="NODE" jdbcType="VARCHAR" property="node" />
+    <result column="OVERALL" jdbcType="INTEGER" property="overall" />
+    <result column="SATIS_REASION" jdbcType="VARCHAR" property="satisReasion" />
+    <result column="SATIS_REASION_TXT" jdbcType="VARCHAR" property="satisReasionTxt" />
+    <result column="NOSATIS_REASION" jdbcType="VARCHAR" property="nosatisReasion" />
+    <result column="NOSATIS_REASION_TXT" jdbcType="VARCHAR" property="nosatisReasionTxt" />
+    <result column="WAIT_TIME_REASION" jdbcType="VARCHAR" property="waitTimeReasion" />
+    <result column="WAIT_TIME_REASION_TXT" jdbcType="VARCHAR" property="waitTimeReasionTxt" />
+    <result column="SERVICE_REASION" jdbcType="VARCHAR" property="serviceReasion" />
+    <result column="SERVICE_REASION_TXT" jdbcType="VARCHAR" property="serviceReasionTxt" />
+    <result column="SKILL_REASION" jdbcType="VARCHAR" property="skillReasion" />
+    <result column="SKILL_REASION_TXT" jdbcType="VARCHAR" property="skillReasionTxt" />
+    <result column="HALL_ENV_REASION" jdbcType="VARCHAR" property="hallEnvReasion" />
+    <result column="HALL_ENV_REASION_TXT" jdbcType="VARCHAR" property="hallEnvReasionTxt" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="APPOINT_RESULT" jdbcType="VARCHAR" property="appointResult" />
+    <result column="SHORTMSG_SEND_TIME" jdbcType="TIMESTAMP" property="shortmsgSendTime" />
+    <result column="SHORTMSG_RECEIVE_TIME" jdbcType="TIMESTAMP" property="shortmsgReceiveTime" />
+    <result column="SEND_SHORTMSG" jdbcType="INTEGER" property="sendShortmsg" />
+    <result column="UUID" jdbcType="VARCHAR" property="uuid" />
+    <result column="INFO_ID" jdbcType="INTEGER" property="infoId" />
+    <result column="CONTENT" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,97 @@
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/occs-tele?useSSL=false&serverTimezone=CTT&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true
+      username: root
+      password:
+#      password: occs@knowology
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      #username: root
+      #password: root
+  activemq:
+    broker-url: failover:(tcp://222.186.101.213:61616)?maxReconnectDelay=5000&startupMaxReconnectAttempts=1&maxReconnectAttempts=0
+    user: admin
+    password: admin
+#  kafka:
+#    bootstrap-servers: 127.0.0.1:9092
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      group-id: test
+#      enable-auto-commit: true
+#      auto-commit-interval: 100ms
+#    producer:
+#      #key-serializer: org.apache.kafka.common.serialization.StringDeserializer
+#      #value-serializer: org.apache.kafka.common.serialization.StringDeserializer
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      batch-size: 65536
+#      buffer-memory: 524288
+
+
+  quartz:
+    job-store-type: jdbc
+
+  redis:
+    host: 127.0.0.1
+    database: 0
+    port: 6379
+    password: knowology
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+#  resources:
+#    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+#  mvc:
+#    static-path-pattern: /**
+server:
+  port: 8989
+  max-http-header-size: 8192
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+mapper:
+    before: true
+
+#####自定义配置
+occs:
+  quartz:
+    url: http://127.0.0.1:8080/call/smart
+  example:
+    url: http://222.186.101.213:8080/icall/singleout
+  security:
+    ignore-token-urls: /login,/initKeyIv,/verify/getCode,/verify/checkCode,/job/audio/*,/voice/audio/*,/test/*
+  kafka:
+    taskResult:
+      topic: test
+    shortMsgResult:
+      topic: shortMsg
+  pic:
+    directory: /log
+  cors:
+    allowOrigin:
+      url: http://localhost:8888,http:211.157.179.109:8089
+  schedule:
+    inner-num-to-job-task:
+      enable: false
+    remote-datasource-filter-task:
+      enable: false
+    remote-bussinessData-task:
+      enable: true
+###定时任务配置
+task:
+  jobdetail:
+    num: 30
+    cron: 0/30 *
+  shortMsgJobDetail:
+    num: 300
+  synPassNum:
+    num: 100
+fileExcel:
+  readPath: C:\Users\ict\Desktop\   #文件读取路径
+  writePath: C:\Users\ict\Desktop\   #文件存放路径
+  password: root

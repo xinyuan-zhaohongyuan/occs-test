@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.QuotaMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.Quota">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="QUOTA_KEY" jdbcType="VARCHAR" property="quotaKey" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="QUOTA" jdbcType="VARCHAR" property="quota" />
+  </resultMap>
+
+  <select id="selectQuotaByJobName" resultMap="BaseResultMap">
+    SELECT JOB_NAME,QUOTA FROM Z_QUOTA WHERE JOB_NAME=#{jobName}
+  </select>
+</mapper>

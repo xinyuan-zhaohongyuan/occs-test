@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.ShortMsgSendMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.ShortMsgSend">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="TELENUM_NAME" jdbcType="VARCHAR" property="telenumName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="SHORTMSG_NAME" jdbcType="VARCHAR" property="shortmsgName" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+  <select id="selectShortMsgSend" resultMap="BaseResultMap">
+    SELECT ID,CREATE_TIME,CONTENT,TELENUM_NAME,CREATOR
+    FROM Z_SHORTMSG_SEND
+    ORDER BY CREATE_TIME DESC
+  </select>
+
+  <select id="selectShortMsgSendById" resultMap="BaseResultMap">
+    SELECT CREATE_TIME,CONTENT,TELENUM_NAME,ID
+    FROM Z_SHORTMSG_SEND
+    <where>
+      <if test="id != null">
+        AND ID=#{id}
+      </if>
+    </where>
+  </select>
+
+  <insert id="insertShortMsgSend" useGeneratedKeys="true" keyProperty="id" parameterType="com.knowology.model.ShortMsgSend">
+    INSERT INTO Z_SHORTMSG_SEND
+    (
+    TELENUM_NAME,
+    CREATE_TIME,
+    CONTENT,
+    CREATOR
+    )
+    VALUES
+    (
+    #{telenumName,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP},
+    #{content,jdbcType=VARCHAR},
+    #{creator,jdbcType=VARCHAR}
+    )
+  </insert>
+</mapper>

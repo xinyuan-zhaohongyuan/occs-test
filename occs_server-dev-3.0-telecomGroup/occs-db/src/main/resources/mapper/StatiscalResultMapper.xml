@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.StatiscalResultMapper">
+    <resultMap id="StatiscalResult" type="com.knowology.po.StatiscalResult">
+        <result column="RANK" jdbcType="DECIMAL" property="rank" />
+        <result column="CITY" jdbcType="VARCHAR" property="city" />
+        <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+        <result column="PERCENT" jdbcType="VARCHAR" property="percent" />
+    </resultMap>
+    <resultMap id="OverAllResult" type="com.knowology.po.OverAll">
+        <result column="OVERALL1" jdbcType="VARCHAR" property="overAll1" />
+        <result column="OVERALL2" jdbcType="VARCHAR" property="overAll2" />
+        <result column="OVERALL3" jdbcType="VARCHAR" property="overAll3" />
+        <result column="OVERALL4" jdbcType="VARCHAR" property="overAll4" />
+        <result column="OVERALL5" jdbcType="VARCHAR" property="overAll5" />
+        <result column="OVERALL6" jdbcType="VARCHAR" property="overAl16" />
+        <result column="OVERALL7" jdbcType="VARCHAR" property="overAll7" />
+        <result column="OVERALL8" jdbcType="VARCHAR" property="overAll8" />
+        <result column="OVERALL9" jdbcType="VARCHAR" property="overAll9" />
+        <result column="OVERALL10" jdbcType="VARCHAR" property="overAll10" />
+        <result column="AVERAGE" jdbcType="VARCHAR" property="average" />
+    </resultMap>
+    <resultMap id="UnStatiscalResult" type="com.knowology.po.UnStatiscalResult">
+        <result column="WAIT_TIME" jdbcType="VARCHAR" property="waitTime" />
+        <result column="SERVICE" jdbcType="VARCHAR" property="service" />
+        <result column="SKILL" jdbcType="VARCHAR" property="skill" />
+        <result column="HALL_ENV" jdbcType="VARCHAR" property="hallEnv" />
+        <result column="UNSTATISCAL" jdbcType="VARCHAR" property="UnStatiscal" />
+    </resultMap>
+
+    <select id="listProvinces" resultType="java.lang.String">
+        SELECT DISTINCT PROVINCE FROM Z_JOB_DETAILS
+    </select>
+
+    <select id="listCitys" resultType="java.lang.String">
+        SELECT DISTINCT CITY FROM Z_JOB_DETAILS
+        <where>
+            <if test="province != null and '' != province">
+                and PROVINCE = #{province}
+            </if>
+        </where>
+    </select>
+
+    <select id="listOverAll" resultMap="OverAllResult">
+        SELECT
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 1 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 1 THEN 1 ELSE 0 END)) OVERALL1,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 2 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 2 THEN 1 ELSE 0 END)) OVERALL2,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 3 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 3 THEN 1 ELSE 0 END)) OVERALL3,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 4 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 4 THEN 1 ELSE 0 END)) OVERALL4,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 5 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 5 THEN 1 ELSE 0 END)) OVERALL5,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 6 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 6 THEN 1 ELSE 0 END)) OVERALL6,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 7 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 7 THEN 1 ELSE 0 END)) OVERALL7,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 8 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 8 THEN 1 ELSE 0 END)) OVERALL8,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 9 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 9 THEN 1 ELSE 0 END)) OVERALL9,
+        CONCAT(100*ROUND(SUM(CASE WHEN OVERALL = 10 THEN 1 ELSE 0 END)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(CASE WHEN OVERALL = 10 THEN 1 ELSE 0 END)) OVERALL10,
+        CONCAT(ROUND(SUM(OVERALL)/SUM(CASE WHEN OVERALL IS NOT NULL THEN 1 ELSE 0 END),2),'-',SUM(OVERALL)) AVERAGE
+        FROM Z_JOB_DETAILS
+        <where>
+            <if test="province != null and ''!=province">
+                and PROVINCE = #{province}
+            </if>
+        </where>
+    </select>
+    <select id="listOverAllRank" resultMap="StatiscalResult">
+        SELECT @rank:=@rank + 1 AS RANK,T.PROVINCE,T.BUSINESS_HALL_NAME,T.PERCENT
+        FROM
+        (
+        SELECT PROVINCE,
+        BUSINESS_HALL_NAME,
+        ROUND(AVG(OVERALL),2) AS PERCENT
+        FROM
+        (
+        SELECT OVERALL,PROVINCE,BUSINESS_HALL_NAME FROM
+        (
+        SELECT OVERALL,
+        JD.PROVINCE PROVINCE,
+        JD.BUSINESS_HALL_NAME BUSINESS_HALL_NAME
+        FROM Z_JOB_DETAILS JD
+        <where>
+            <if test="province != null and ''!=province">
+                and JD.PROVINCE = #{province}
+            </if>
+        </where>
+        ) J
+        GROUP BY PROVINCE,BUSINESS_HALL_NAME,OVERALL
+        ) F
+        WHERE OVERALL IS NOT NULL AND PROVINCE IS NOT NULL AND BUSINESS_HALL_NAME IS NOT NULL
+        GROUP BY PROVINCE,BUSINESS_HALL_NAME
+        ORDER BY AVG(OVERALL) DESC
+        ) T,(SELECT @rank:=0) R
+    </select>
+    <select id="unStatiscalResult" resultMap="UnStatiscalResult">
+      SELECT
+	    SUM(CASE WHEN NOSATIS_REASION = '等待时长' THEN 1 ELSE 0 END) WAIT_TIME,
+	    SUM(CASE WHEN NOSATIS_REASION = '服务态度'  THEN 1 ELSE 0 END) SERVICE,
+	    SUM(CASE WHEN NOSATIS_REASION = '业务技能' THEN 1 ELSE 0 END) SKILL,
+	    SUM(CASE WHEN NOSATIS_REASION = '服务环境' THEN 1 ELSE 0 END) HALL_ENV,
+	    SUM(CASE WHEN NOSATIS_REASION = '其他' THEN 1 ELSE 0 END)  UNSTATISCAL
+      FROM Z_JOB_DETAILS
+    </select>
+    <select id="unStatiscalList" resultType="com.knowology.po.Reason">
+        SELECT ${column} AS REASON,
+               COUNT(${column}) AS NUM
+        FROM Z_JOB_DETAILS
+        WHERE ${column} IS NOT NULL
+        GROUP BY ${column}
+        ORDER BY NUM DESC
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.JobMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.Job">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="TELENUM_GROUP_NAME" jdbcType="VARCHAR" property="telenumGroupName" />
+    <result column="SCENE_NAME" jdbcType="VARCHAR" property="sceneName" />
+    <result column="PLAY_MODE" jdbcType="VARCHAR" property="playMode" />
+    <result column="CRON_EXPRESSION" jdbcType="VARCHAR" property="cronExpression" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+    <result column="STRATEGY_NAME" jdbcType="VARCHAR" property="strategyName" />
+    <result column="TIME_STRATEGY_NAME" jdbcType="VARCHAR" property="timeStrategyName" />
+    <result column="COMPLETE" jdbcType="INTEGER" property="complete" />
+    <result column="SUCCESS" jdbcType="INTEGER" property="success" />
+    <result column="TOTAL" jdbcType="INTEGER" property="total" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="UPDATE_USER" jdbcType="VARCHAR" property="updateUser" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="SHORTMSG_MODEL_NAME" jdbcType="VARCHAR" property="shortMsgModelName" />
+    <result column="WAIT_REPLY_TIME" jdbcType="INTEGER" property="waitReplyTime" />
+    <result column="READY" jdbcType="INTEGER" property="ready" />
+    <result column="SEND_SHORTMSG" jdbcType="INTEGER" property="sendShortMsg" />
+    <result column="IS_AUTO" jdbcType="INTEGER" property="isAuto" />
+  </resultMap>
+  <select id="countByJobName" resultType="java.lang.Integer">
+    select COUNT(1) from Z_JOB
+    where JOB_NAME = #{jobName}
+  </select>
+  <update id="updateSendShortMsgStatus">
+    UPDATE Z_JOB SET SEND_SHORTMSG = 1
+    WHERE JOB_NAME=#{jobName}
+  </update>
+  <select id="selectByJobName" resultMap="BaseResultMap">
+    SELECT ID,JOB_NAME,SCENE_NAME,PLAY_MODE,CRON_EXPRESSION,SHORTMSG_MODEL_NAME,SEND_SHORTMSG FROM Z_JOB
+    WHERE JOB_NAME = #{jobName}
+  </select>
+
+<select id="selectByTelenumGroupName" resultMap="BaseResultMap">
+    SELECT ID,JOB_NAME,SCENE_NAME,SHORTMSG_MODEL_NAME,SEND_SHORTMSG,IS_AUTO FROM Z_JOB WHERE TELENUM_GROUP_NAME=#{telenumGroupName}
+</select>
+  <update id="updateByCondition">
+    UPDATE Z_JOB
+    <set>
+      <if test="total != null">
+        TOTAL = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="complete != null">
+        COMPLETE = #{complete,jdbcType=INTEGER},
+      </if>
+      <if test="ready != null">
+        READY = #{ready,jdbcType=INTEGER},
+      </if>
+      <if test="success != null">
+        SUCCESS = #{success,jdbcType=INTEGER},
+      </if>
+    </set>
+    WHERE JOB_NAME=#{jobName}
+  </update>
+</mapper>

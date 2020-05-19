@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.DataStorageMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.DataStorage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="PHONE_NUM" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="CLIENT_NAME" jdbcType="VARCHAR" property="clientName" />
+    <result column="INPUT_TIME" jdbcType="TIMESTAMP" property="inputTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="AGE" jdbcType="VARCHAR" property="age" />
+    <result column="GENDER" jdbcType="VARCHAR" property="gender" />
+    <result column="PROVINCE" jdbcType="VARCHAR" property="province" />
+    <result column="CITY" jdbcType="VARCHAR" property="city" />
+    <result column="BUSINESS_HALL_NAME" jdbcType="VARCHAR" property="businessHallName" />
+    <result column="BUSSINESS_TYPE" jdbcType="VARCHAR" property="bussinessType" />
+  </resultMap>
+  <select id="todayDataStorage" resultMap="BaseResultMap" >
+    SELECT * FROM Z_DATA_STORAGE
+    <where>
+      <if test="province != null and ''!=province">
+        AND PROVINCE = #{province}
+      </if>
+      <if test="bussinessType != null and ''!=bussinessType">
+        AND BUSSINESS_TYPE = #{bussinessType}
+      </if>
+      AND DATE(INPUT_TIME)=CURDATE()
+    </where>
+  </select>
+  <select id="listProvinces" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT DISTINCT PROVINCE FROM Z_DATA_STORAGE
+  </select>
+  <select id="listCitys" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT DISTINCT CITY FROM Z_DATA_STORAGE
+  </select>
+  <select id="listBusinessHallNames" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT DISTINCT BUSINESS_HALL_NAME FROM Z_DATA_STORAGE
+  </select>
+  <select id="listBussinessTypes" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT DISTINCT BUSSINESS_TYPE FROM Z_DATA_STORAGE
+  </select>
+  <select id="loadDataFilter" resultMap="BaseResultMap">
+    SELECT * FROM Z_DATA_STORAGE
+    <where>
+      <if test="province != null and ''!=province">
+        AND PROVINCE = #{province}
+      </if>
+      <if test="city != null and ''!=city">
+        AND CITY = #{city}
+      </if>
+      <if test="businessHallName != null and ''!=businessHallName">
+        AND BUSINESS_HALL_NAME = #{businessHallName}
+      </if>
+      <if test="bussinessType != null and ''!=bussinessType">
+        AND BUSSINESS_TYPE = #{bussinessType}
+      </if>
+      <if test="gender != null and ''!=gender">
+        AND GENDER = #{gender}
+      </if>
+      <if test="createTimeBegin != null">
+        AND CREATE_TIME &gt;= #{createTimeBegin}
+      </if>
+      <if test="createTimeEnd != null">
+        AND CREATE_TIME &lt;= #{createTimeEnd}
+      </if>
+      <if test="inputTimeBegin != null">
+        AND INPUT_TIME &gt;= #{inputTimeBegin}
+      </if>
+      <if test="inputTimeEnd != null">
+        AND INPUT_TIME &lt;= #{inputTimeEnd}
+      </if>
+    </where>
+  </select>
+  <select id="countDataFilter" resultType="int">
+    SELECT count(1) FROM Z_DATA_STORAGE
+    <where>
+      <if test="province != null and ''!=province">
+        AND PROVINCE = #{province}
+      </if>
+      <if test="city != null and ''!=city">
+        AND CITY = #{city}
+      </if>
+      <if test="businessHallName != null and ''!=businessHallName">
+        AND BUSINESS_HALL_NAME = #{businessHallName}
+      </if>
+      <if test="bussinessType != null and ''!=bussinessType">
+        AND BUSSINESS_TYPE = #{bussinessType}
+      </if>
+      <if test="gender != null and ''!=gender">
+        AND GENDER = #{gender}
+      </if>
+      <if test="createTimeBegin != null">
+        AND CREATE_TIME &gt;= #{createTimeBegin}
+      </if>
+      <if test="createTimeEnd != null">
+        AND CREATE_TIME &lt;= #{createTimeEnd}
+      </if>
+      <if test="inputTimeBegin != null">
+        AND INPUT_TIME &gt;= #{inputTimeBegin}
+      </if>
+      <if test="inputTimeEnd != null">
+        AND INPUT_TIME &lt;= #{inputTimeEnd}
+      </if>
+    </where>
+  </select>
+</mapper>

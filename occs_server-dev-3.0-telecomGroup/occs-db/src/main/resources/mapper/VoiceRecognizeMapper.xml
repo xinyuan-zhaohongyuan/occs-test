@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.VoiceRecognizeMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.VoiceRecognize">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="JOB_ID" jdbcType="INTEGER" property="jobId" />
+    <result column="RECOGNIZE_RESULT" jdbcType="VARCHAR" property="recognizeResult" />
+    <result column="CALL_TIME" jdbcType="TIMESTAMP" property="callTime" />
+    <result column="BEGIN_TIME" jdbcType="VARCHAR" property="beginTime" />
+    <result column="END_TIME" jdbcType="VARCHAR" property="endTime" />
+    <result column="LABEL_STATUS" jdbcType="VARCHAR" property="labelStatus" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="VOICE_TYPE" jdbcType="VARCHAR" property="voiceType" />
+    <result column="LABEL_TYPE" jdbcType="VARCHAR" property="labelType" />
+    <result column="MANUAL_CORRECT" jdbcType="VARCHAR" property="manualCorrect" />
+    <result column="LABEL_TIME" jdbcType="TIMESTAMP" property="labelTime" />
+    <result column="LABEL_PERSION" jdbcType="VARCHAR" property="labelPersion" />
+    <result column="VOICE_QUALITY" jdbcType="VARCHAR" property="voiceQuality" />
+    <result column="ORDER_TYPE" jdbcType="VARCHAR" property="orderType" />
+    <result column="PASSIVE_NUM" jdbcType="VARCHAR" property="passiveNum" />
+  </resultMap>
+
+  <select id="recognizeList" resultMap="BaseResultMap">
+    SELECT ID,JOB_ID,RECOGNIZE_RESULT,CALL_TIME,LABEL_STATUS,VOICE_TYPE,LABEL_TYPE,MANUAL_CORRECT,LABEL_TIME,LABEL_PERSION,VOICE_QUALITY,ORDER_TYPE
+    FROM Z_VOICE_RECOGNIZE
+    <where>
+      <if test="jobId != null">
+        AND JOB_ID = #{jobId}
+      </if>
+      <if test="passiveNum != null and ''!=passiveNum">
+        AND PASSIVE_NUM LIKE concat('%',#{passiveNum},'%')
+      </if>
+      <if test="labelStatus != null and ''!=labelStatus">
+       AND LABEL_STATUS = #{labelStatus}
+      </if>
+      <if test="startTime != null and ''!=startTime">
+        AND DATE_FORMAT(CALL_TIME,'%Y-%m-%d %H:%m:%s') &gt;= #{startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and ''!=endTime">
+        AND DATE_FORMAT(CALL_TIME,'%Y-%m-%d %H:%m:%s') &lt;= #{endTime,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectJobIds" resultMap="BaseResultMap">
+    SELECT JOB_ID
+    FROM Z_VOICE_RECOGNIZE
+    <where>
+        <if test="jobId != null">
+            AND JOB_ID = #{jobId}
+        </if>
+      <if test="labelStatus != null and ''!=labelStatus">
+        AND LABEL_STATUS = #{labelStatus}
+      </if>
+      <if test="startTime != null and ''!=startTime">
+        AND DATE_FORMAT(CALL_TIME,'%Y-%m-%d %H:%m:%s') &gt;= #{startTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null and ''!=endTime">
+        AND DATE_FORMAT(CALL_TIME,'%Y-%m-%d %H:%m:%s') &lt;= #{endTime,jdbcType=VARCHAR}
+      </if>
+      <if test="passiveNum != null and ''!=passiveNum">
+        AND PASSIVE_NUM LIKE concat('%',#{passiveNum,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    GROUP BY JOB_ID DESC
+  </select>
+
+  <select id="labelList" resultMap="BaseResultMap">
+    SELECT ID,JOB_ID,RECOGNIZE_RESULT,CALL_TIME,LABEL_STATUS,VOICE_TYPE,LABEL_TYPE,MANUAL_CORRECT,LABEL_TIME,LABEL_PERSION,VOICE_QUALITY,ORDER_TYPE
+    FROM Z_VOICE_RECOGNIZE WHERE LABEL_STATUS='已标注'
+    <if test="startTime != null and ''!=startTime">
+      AND DATE_FORMAT(LABEL_TIME,'%Y-%m-%d %H:%m:%s') &gt;= #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != null and ''!=endTime">
+      AND DATE_FORMAT(LABEL_TIME,'%Y-%m-%d %H:%m:%s') &lt;= #{endTime,jdbcType=VARCHAR}
+    </if>
+    ORDER BY LABEL_TIME DESC
+  </select>
+</mapper>

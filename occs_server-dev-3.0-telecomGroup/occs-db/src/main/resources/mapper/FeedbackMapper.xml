@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.FeedbackMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.Feedback">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="JOB_NAME" jdbcType="VARCHAR" property="jobName" />
+    <result column="SCENE" jdbcType="VARCHAR" property="scene" />
+    <result column="NODE" jdbcType="VARCHAR" property="node" />
+    <result column="JOB_DATE" jdbcType="DATE" property="jobDate" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+</mapper>

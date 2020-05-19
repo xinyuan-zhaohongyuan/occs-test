@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.ShortMsgMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.ShortMsgModel">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="SHORTMSG_NAME" jdbcType="VARCHAR" property="shortmsgName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SHORTMSG_CONTENT" jdbcType="VARCHAR" property="shortmsgContent" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+  <delete id="deleteShortMsg">
+    DELETE FROM Z_SHORTMSG WHERE ID=#{id}
+  </delete>
+  <select id="selectById" resultMap="BaseResultMap">
+    SELECT ID,SHORTMSG_NAME,CREATE_TIME,SHORTMSG_CONTENT,CREATOR FROM Z_SHORTMSG WHERE SHORTMSG_NAME=#{shortmsgName}
+  </select>
+  <select id="selectShortMsgModelList" resultMap="BaseResultMap">
+    SELECT ID,SHORTMSG_NAME,CREATE_TIME,SHORTMSG_CONTENT,CREATOR FROM Z_SHORTMSG ORDER BY CREATE_TIME DESC
+  </select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knowology.dao.TimeStrategyMapper">
+  <resultMap id="BaseResultMap" type="com.knowology.model.TimeStrategy">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="STRATEGY_NAME" jdbcType="VARCHAR" property="strategyName" />
+    <result column="REPEAT_WEEK" jdbcType="VARCHAR" property="repeatWeek" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="EXECUTE_TIME" jdbcType="VARCHAR" property="executeTime" />
+  </resultMap>
+  <select id="selectStrategyList" resultMap="BaseResultMap">
+    SELECT ID,STRATEGY_NAME,REPEAT_WEEK,CREATE_TIME,CREATOR,EXECUTE_TIME
+    FROM Z_TIME_STRATEGY
+    <where>
+      <if test="strategyName != null and ''!=strategyName">
+        AND STRATEGY_NAME LIKE CONCAT('%',#{strategyName},'%')
+      </if>
+    </where>
+  </select>
+  <delete id="deleteStrategy">
+    DELETE FROM Z_TIME_STRATEGY WHERE ID=#{id}
+  </delete>
+  <insert id="addStrategy">
+    INSERT INTO Z_TIME_STRATEGY
+    (
+    STRATEGY_NAME,
+    EXECUTE_TIME,
+    CREATOR,
+    REPEAT_WEEK,
+    CREATE_TIME
+    )
+    VALUES
+    (
+    #{strategyName,jdbcType=VARCHAR},
+    #{executeTime,jdbcType=VARCHAR},
+    #{creator,jdbcType=VARCHAR},
+    #{repeatWeek,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP}
+    )
+  </insert>
+  <select id="selectStrategyByName" resultMap="BaseResultMap">
+    SELECT ID,STRATEGY_NAME,REPEAT_WEEK,CREATE_TIME,CREATOR,EXECUTE_TIME
+    FROM Z_TIME_STRATEGY WHERE STRATEGY_NAME = #{strategyName}
+  </select>
+</mapper>

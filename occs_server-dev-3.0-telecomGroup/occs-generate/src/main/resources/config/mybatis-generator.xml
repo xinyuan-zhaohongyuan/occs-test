@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <!-- 该配置会使生产的 Mapper自动继承 MyMapper -->
+            <property name="mappers" value="com.knowology.config.MyMapper" />
+            <!-- caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为 true -->
+            <property name="caseSensitive" value="false"/>
+        </plugin>
+        <commentGenerator>
+            <property name="javaFileEncoding" value="UTF-8"/>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="false"/>
+        </commentGenerator>
+
+        <!-- 数据库链接地址账号密码 -->
+<!--        <jdbcConnection-->
+<!--                driverClass="com.mysql.jdbc.Driver"-->
+<!--                connectionURL="jdbc:mysql://222.186.101.213:3306/occs_tele"-->
+<!--                userId="occs_tele"-->
+<!--                password="occs@knowology">-->
+<!--            <property name="remarksReporting" value="true"></property>-->
+<!--        </jdbcConnection>-->
+                <jdbcConnection
+                        driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1/occs_tele"
+                        userId="root"
+                        password="occs@knowology">
+                    <property name="remarksReporting" value="true"></property>
+                </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成 Model类存放位置 -->
+        <javaModelGenerator targetPackage="com.knowology.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成映射文件存放位置 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources/">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 生成 Dao类存放位置 -->
+        <!-- 客户端代码，生成易于使用的针对 Model对象和 XML配置文件的代码
+            type="ANNOTATEDMAPPER"，生成 Java Model 和基于注解的 Mapper对象
+            type="XMLMAPPER"，生成 SQL Map XML文件和独立的 Mapper 接口 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.knowology.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- 配置需要生成的表 -->
+        <!--外呼演示表-->
+        <table tableName="Z_EXAMPLE" domainObjectName="ExampleData" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--被叫号码组管理表-->
+        <table  tableName="Z_PASSIVENUM" domainObjectName="PassiveNum" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--被叫号码组详情表-->
+        <table tableName="Z_PASSIVENUM_DETAILS" domainObjectName="PassiveNumDetail" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--定时任务表-->
+        <table  tableName="Z_JOB" domainObjectName="Job" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--定时任务记录详情表-->
+        <table tableName="Z_JOB_DETAILS" domainObjectName="JobDetail" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <table tableName="Z_JOB_DETAILS_TASK" domainObjectName="JobDetailTask" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--时间策略-->
+        <table tableName="Z_TIME_STRATEGY" domainObjectName="TimeStrategy" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--重呼策略-->
+        <table tableName="Z_STRATEGY" domainObjectName="StrategyDetail" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--黑名单-->
+        <table tableName="Z_BLACKLISTCALL" domainObjectName="BlackListCall" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+
+        <!--用户表-->
+        <table tableName="Z_USER" domainObjectName="UserInfo" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="USER_ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--角色表-->
+        <table tableName="Z_ROLE" domainObjectName="Role" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ROLE_ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--用户角色中间表-->
+        <table tableName="Z_USER_ROLE" domainObjectName="UserRole" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+        </table>
+        <!--菜单表-->
+        <table tableName="Z_MENU" domainObjectName="Menu" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="MENU_ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--角色菜单中间表-->
+        <table tableName="Z_ROLE_MENU" domainObjectName="RoleMenu" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+        </table>
+        <!--部门表-->
+        <table tableName="Z_DEPT" domainObjectName="Dept" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="DEPT_ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--场景管理-->
+        <table tableName="Z_SCENE" domainObjectName="Scene" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <!--场景管理-->
+        <table tableName="Z_FEEDBACK_REPORT" domainObjectName="Feedback" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <table tableName="Z_SHORTMSG" domainObjectName="ShortMsg" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <table tableName="Z_DATA_STORAGE" domainObjectName="DataStorage" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+        <table tableName="Z_QUOTA" domainObjectName="Quota" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+        <table tableName="Z_BUSSINESS_DATA" domainObjectName="BussinessData" enableCountByExample="true" enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true" selectByExampleQueryId="true">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <generatedKey column="ID" sqlStatement="mysql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>
